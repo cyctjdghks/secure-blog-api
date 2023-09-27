@@ -1,4 +1,4 @@
-package com.spring.security;
+package edu.seonghwan.security;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
