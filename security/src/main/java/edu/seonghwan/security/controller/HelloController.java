@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
-
-        log.info("{} 메소드 호출", Thread.currentThread().getStackTrace()[1].getMethodName());
-
         return ResponseEntity.ok("hello");
     }
 }
