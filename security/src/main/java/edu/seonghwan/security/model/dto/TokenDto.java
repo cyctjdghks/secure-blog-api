@@ -1,4 +1,4 @@
-package edu.seonghwan.security.model.dto.response;
+package edu.seonghwan.security.model.dto;
 
 import lombok.*;
 

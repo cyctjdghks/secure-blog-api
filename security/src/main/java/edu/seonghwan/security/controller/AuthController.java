@@ -1,9 +1,10 @@
 package edu.seonghwan.security.controller;
 
 import edu.seonghwan.security.jwt.JwtFilter;
-import edu.seonghwan.security.jwt.TokenProvider;
+import edu.seonghwan.security.jwt.JwtTokenProvider;
 import edu.seonghwan.security.model.dto.request.LoginDto;
-import edu.seonghwan.security.model.dto.response.TokenDto;
+import edu.seonghwan.security.model.dto.TokenDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +21,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AuthController {
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
@@ -38,7 +36,7 @@ public class AuthController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = tokenProvider.createToken(authentication);
+        String jwt = jwtTokenProvider.createToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);

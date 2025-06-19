@@ -3,7 +3,8 @@ package edu.seonghwan.security.config;
 import edu.seonghwan.security.jwt.JwtAccessDeniedHandler;
 import edu.seonghwan.security.jwt.JwtAuthenticationEntryPoint;
 import edu.seonghwan.security.jwt.JwtSecurityConfig;
-import edu.seonghwan.security.jwt.TokenProvider;
+import edu.seonghwan.security.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,21 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
-    public SecurityConfig(
-            TokenProvider tokenProvider,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
-    ) {
-        this.tokenProvider = tokenProvider;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -74,9 +66,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated() // 나머지 요청들은 모두 인증
 
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .apply(new JwtSecurityConfig(jwtTokenProvider));
     }
 
 
 
 }
+

@@ -2,6 +2,7 @@ package edu.seonghwan.security.controller;
 
 import edu.seonghwan.security.model.dto.UserDto;
 import edu.seonghwan.security.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +14,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @PostMapping("/test-redirect")
     public void testRedirect(HttpServletResponse response) throws IOException {
